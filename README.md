@@ -22,7 +22,11 @@ Add Rajawali to VideoLivewallpaper as an Android Library Project
     
 ## Tested 
   * Galaxy S3
+  * Galaxy Tab 10 (bug with .mp4) 
     
+## Bugs
+  * Format mp4 on Galaxy Tab 10, the format 3gp works very well	
+  
 ## Licence
     
 Copyright 2013-2014 - Alexis Lecanu ([alexislecanu@gmail.com](mailto:alexislecanu@gmail.com))
