@@ -1,0 +1,26 @@
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    android:key="rajawalisharedprefs"
+    android:title="@string/settings_title" >
+
+    <CheckBoxPreference 
+        android:enabled="true" 
+        android:title="@string/mute" 
+        android:key="mute" 
+        android:summaryOn="@string/mute_enabled" 
+        android:summaryOff="@string/mute_disabled" 
+        android:selectable="true" 
+        android:defaultValue="false"/>
+	<Preference 
+	    android:enabled="true" 
+	    android:title="@string/file" 
+	    android:key="file" 
+	    android:summary="@string/file_summary" 
+	    android:selectable="true"/>
+    <ListPreference
+        android:defaultValue="classic"
+        android:entries="@array/rendererModeEntities"
+        android:entryValues="@array/rendererModeValues"
+        android:key="rendererMode"
+        android:summary="@string/renderer_mode_list_summary"
+        android:title="@string/renderer_mode_list"/>	     
+</PreferenceScreen>
