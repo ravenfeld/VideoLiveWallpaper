@@ -12,11 +12,16 @@ Please check out the [example project](https://github.com/ravenfeld/VideoLivewal
 ### How to integrate it ?
 
 #### Eclipse
- You have to [download it](https://github.com/ravenfeld/VideoLivewallpaper/archive/master.zip) and import the **VideoLivewallpaper-master** folder in your Eclipse.
+ You have to [download it](https://github.com/ravenfeld/VideoLivewallpaper/archive/master.zip) 
+ You have to [download it](https://github.com/ravenfeld/aFileChooser/archive/dev.zip) 
+ You have to [download it](https://github.com/ravenfeld/Rajawali/archive/master.zip) 
  
-Add aFileChooser to VideoLivewallpaper as an Android Library Project
+ Import the **VideoLivewallpaper-master** folder in your Eclipse.
+ 
+ Add aFileChooser to VideoLivewallpaper as an Android Library Project
 
-Add Rajawali to VideoLivewallpaper as an Android Library Project  
+ Add Rajawali to VideoLivewallpaper as an Android Library Project
+   
 ## Developed by
   * Alexis Lecanu alias Ravenfeld - [alexislecanu@gmail.com](mailto:alexislecanu@gmail.com)
     
