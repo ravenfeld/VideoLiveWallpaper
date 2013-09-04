@@ -13,12 +13,7 @@ Please check out the [example project](https://github.com/ravenfeld/VideoLivewal
 
 #### Eclipse
  You have to [download it](https://github.com/ravenfeld/VideoLivewallpaper/archive/master.zip) and import the **VideoLivewallpaper-master** folder in your Eclipse.
-
-
-
-
-```
-    
+  
 ## Developed by
   * Alexis Lecanu - [alexislecanu@gmail.com](mailto:alexislecanu@gmail.com)
     
