@@ -1,0 +1,5 @@
+<wallpaper xmlns:android="http://schemas.android.com/apk/res/android"
+    android:author="@string/lwp_author"
+    android:description="@string/lwp_desc"
+    android:settingsActivity="fr.ravenfeld.livewallpaper.video.Settings"
+    android:thumbnail="@drawable/icon" />
