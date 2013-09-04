@@ -306,12 +306,13 @@ public abstract class Wallpaper extends WallpaperService {
 		public void onOffsetsChanged(float xOffset, float yOffset, float xOffsetStep, float yOffsetStep,
 				int xPixelOffset, int yPixelOffset) {
 			super.onOffsetsChanged(xOffset, yOffset, xOffsetStep, yOffsetStep, xPixelOffset, yPixelOffset);
-			if (mRenderer != null)
+			if (mRenderer != null) {
 				if (this.isPreview()) {
-					mRenderer.onOffsetsChanged(0.5f, yOffset, xOffsetStep, yOffsetStep, xPixelOffset, yPixelOffset);
-				} else {
-					mRenderer.onOffsetsChanged(xOffset, yOffset, xOffsetStep, yOffsetStep, xPixelOffset, yPixelOffset);
+					xOffset = 0.5f;
 				}
+				mRenderer.onOffsetsChanged(xOffset, yOffset, xOffsetStep, yOffsetStep, xPixelOffset, yPixelOffset);
+			}
+
 		}
 
 		@Override
