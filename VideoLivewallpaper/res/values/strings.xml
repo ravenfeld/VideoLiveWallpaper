@@ -18,7 +18,7 @@
 
     <!-- Settings -->
     <string name="settings_title">Settings</string>
-	<string name="chooser_label">label</string>
+	<string name="chooser_label">Select a file</string>
 	<string name="mute">Mute movie</string>
 	<string name="mute_enabled">Mute enabled</string>
 	<string name="mute_disabled">Mute disabled</string>
