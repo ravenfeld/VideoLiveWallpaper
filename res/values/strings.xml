@@ -8,7 +8,7 @@
     <string name="lwp_name">Video LiveWallpaper</string>
 
     <!-- Description in Live Wallpaper Picker list -->
-    <string name="lwp_desc">Video Wallpaper Template, select a movie and define as livewallpaper</string>
+    <string name="lwp_desc">Video LiveWallpaper, select a movie and define as livewallpaper</string>
 
     <!-- Author -->
     <string name="lwp_author">Ravenfeld</string>
