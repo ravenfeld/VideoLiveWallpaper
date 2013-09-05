@@ -1,5 +1,6 @@
 package fr.ravenfeld.livewallpaper.video;
 
+import java.io.File;
 import java.io.IOException;
 
 import javax.microedition.khronos.egl.EGLConfig;
@@ -16,6 +17,8 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.media.MediaPlayer;
 import android.net.Uri;
+
+import com.ipaulpro.afilechooser.utils.FileUtils;
 
 public class Renderer extends RajawaliRenderer implements
 		SharedPreferences.OnSharedPreferenceChangeListener {
@@ -47,7 +50,7 @@ public class Renderer extends RajawaliRenderer implements
 		getCurrentCamera().setLookAt(0, 0, 0);
 		mMediaPlayer = new MediaPlayer();
 
-		mVideoTexture = new VideoTexture("sintelTrailer", mMediaPlayer);
+		mVideoTexture = new VideoTexture("VideoLiveWallpaper", mMediaPlayer);
 		material = new Material();
 		try {
 			material.addTexture(mVideoTexture);
@@ -80,18 +83,16 @@ public class Renderer extends RajawaliRenderer implements
 	}
 
 	private void initMedia() {
-		String file = mSharedPreferences.getString("uri", "");
+		Uri uri = Uri.parse(mSharedPreferences.getString("uri", ""));
 
 		mMediaPlayer.stop();
 		mMediaPlayer.reset();
 
 		try {
-			if (!file.equalsIgnoreCase("")) {
-
-				mMediaPlayer.setDataSource(getContext(), Uri.parse(file));
-
+			File file = FileUtils.getFile(uri);
+			if (file != null && file.isFile()) {
+				mMediaPlayer.setDataSource(getContext(), uri);
 			} else {
-
 				String fileName = "android.resource://"
 						+ getContext().getPackageName() + "/" + R.raw.empty;
 				mMediaPlayer.setDataSource(getContext(), Uri.parse(fileName));

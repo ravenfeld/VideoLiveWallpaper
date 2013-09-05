@@ -1,5 +1,6 @@
 package fr.ravenfeld.livewallpaper.video;
 
+import java.io.File;
 import java.util.ArrayList;
 
 import rajawali.wallpaper.Wallpaper;
@@ -12,6 +13,7 @@ import android.preference.Preference;
 import android.preference.PreferenceActivity;
 
 import com.ipaulpro.afilechooser.FileChooserActivity;
+import com.ipaulpro.afilechooser.utils.FileUtils;
 
 // Deprecated PreferenceActivity methods are used for API Level 10 (and lower) compatibility
 // https://developer.android.com/guide/topics/ui/settings.html#Overview
@@ -71,10 +73,17 @@ public class Settings extends PreferenceActivity implements SharedPreferences.On
 	}
 
 	private void fileText() {
-		String file = getPreferenceManager().getSharedPreferences().getString("uri", "");
-		if (!file.equalsIgnoreCase("")) {
-			String[] files_split = file.split("/");
-			mFile.setSummary(getString(R.string.file_summary) + ": " + files_split[files_split.length - 1]);
+		String uri = getPreferenceManager().getSharedPreferences().getString(
+				"uri", "");
+		File file = FileUtils.getFile(Uri.parse(uri));
+		if (file == null || !file.isFile()) {
+			uri = "";
+			setUriPreference(uri);
+		}
+		if (!uri.equalsIgnoreCase("")) {
+			String[] uri_split = uri.split("/");
+			mFile.setSummary(getString(R.string.file_summary) + ": "
+					+ uri_split[uri_split.length - 1]);
 		}
 	}
 
@@ -92,6 +101,12 @@ public class Settings extends PreferenceActivity implements SharedPreferences.On
 		mRendererMode.setSummary(getString(R.string.renderer_mode_list_summary) + ": " + string);
 	}
 
+	private void setUriPreference(String uri) {
+		SharedPreferences.Editor prefEditor = getPreferenceManager()
+				.getSharedPreferences().edit();
+		prefEditor.putString("uri", "" + uri);
+		prefEditor.commit();
+	}
 	private static final int REQUEST_CHOOSER = 1234;
 
 	@Override
@@ -99,11 +114,8 @@ public class Settings extends PreferenceActivity implements SharedPreferences.On
 		switch (requestCode) {
 		case REQUEST_CHOOSER:
 			if (resultCode == RESULT_OK) {
-
 				Uri file = data.getData();
-				SharedPreferences.Editor prefEditor = getPreferenceManager().getSharedPreferences().edit();
-				prefEditor.putString("uri", "" + file);
-				prefEditor.commit();
+				setUriPreference(file.toString());
 			}
 		}
 	}
