@@ -23,7 +23,7 @@ Please check out the [example project](https://github.com/ravenfeld/VideoLivewal
  Add Rajawali to VideoLivewallpaper as an Android Library Project
    
 ## Developed by
-  * Alexis Lecanu alias Ravenfeld - [alexislecanu@gmail.com](mailto:alexislecanu@gmail.com)
+  * Alexis Lecanu alias Ravenfeld - [alexis.lecanu@gmail.com](mailto:alexis.lecanu@gmail.com)
     
 ## Tested 
   * Galaxy S3
@@ -34,7 +34,7 @@ Please check out the [example project](https://github.com/ravenfeld/VideoLivewal
   
 ## Licence
     
-Copyright 2013-2014 - Alexis Lecanu ([alexislecanu@gmail.com](mailto:alexislecanu@gmail.com))
+Copyright 2013-2014 - Alexis Lecanu ([alexis.lecanu@gmail.com](mailto:alexis.lecanu@gmail.com))
     
 Licensed under the Apache License, Version 2.0 (the "License"); you may not
 use this file except in compliance with the License. You may obtain a copy of
