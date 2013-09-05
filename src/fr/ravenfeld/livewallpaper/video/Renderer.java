@@ -16,28 +16,26 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.media.MediaPlayer;
 import android.net.Uri;
-import android.view.Display;
-import android.view.WindowManager;
 
-public class Renderer extends RajawaliRenderer implements SharedPreferences.OnSharedPreferenceChangeListener {
+public class Renderer extends RajawaliRenderer implements
+		SharedPreferences.OnSharedPreferenceChangeListener {
 	private MediaPlayer mMediaPlayer;
 	private VideoTexture mVideoTexture;
-	private final int mDisplayWidth;
-	private final int mDisplayHeight;
 	private final SharedPreferences mSharedPreferences;
 	private Plane screen;
-	private int position;
 	private float widthPlane;
 	private Material material;
 
+	private enum ModeRenderer {
+		CLASSIC, LETTER_BOXED, STRETCHED
+	}
+
 	public Renderer(Context context) {
 		super(context);
-		Display display = ((WindowManager) mContext.getSystemService(Context.WINDOW_SERVICE)).getDefaultDisplay();
 
-		mSharedPreferences = context.getSharedPreferences(Wallpaper.SHARED_PREFS_NAME, 0);
+		mSharedPreferences = context.getSharedPreferences(
+				Wallpaper.SHARED_PREFS_NAME, 0);
 		mSharedPreferences.registerOnSharedPreferenceChangeListener(this);
-		mDisplayWidth = display.getWidth();
-		mDisplayHeight = display.getHeight();
 
 	}
 
@@ -66,110 +64,136 @@ public class Renderer extends RajawaliRenderer implements SharedPreferences.OnSh
 
 	private void initVideo() {
 		if (mMediaPlayer != null) {
-			String file = mSharedPreferences.getString("uri", "");
-			boolean mute = mSharedPreferences.getBoolean("mute", false);
-			String renderer = mSharedPreferences.getString("rendererMode", "classic");
+			initMute();
+			initMedia();
+			initPlane();
+		}
+	}
 
-			mMediaPlayer.stop();
-			mMediaPlayer.reset();
-			if (mute) {
-				mMediaPlayer.setVolume(0, 0);
+	private void initMute() {
+		boolean mute = mSharedPreferences.getBoolean("mute", false);
+		if (mute) {
+			mMediaPlayer.setVolume(0, 0);
+		} else {
+			mMediaPlayer.setVolume(1, 1);
+		}
+	}
+
+	private void initMedia() {
+		String file = mSharedPreferences.getString("uri", "");
+
+		mMediaPlayer.stop();
+		mMediaPlayer.reset();
+
+		try {
+			if (!file.equalsIgnoreCase("")) {
+
+				mMediaPlayer.setDataSource(getContext(), Uri.parse(file));
+
 			} else {
-				mMediaPlayer.setVolume(1, 1);
+
+				String fileName = "android.resource://"
+						+ getContext().getPackageName() + "/" + R.raw.empty;
+				mMediaPlayer.setDataSource(getContext(), Uri.parse(fileName));
 			}
-			try {
-				if (!file.equalsIgnoreCase("")) {
 
-					mMediaPlayer.setDataSource(getContext(), Uri.parse(file));
+			mMediaPlayer.setLooping(true);
+			mMediaPlayer.prepare();
+		} catch (IllegalArgumentException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (SecurityException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IllegalStateException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
 
-				} else {
+	private void initPlane() {
+		String renderer = mSharedPreferences.getString("rendererMode",
+				"classic");
+		if (renderer.equalsIgnoreCase("letter_boxed")) {
+			rendererMode(ModeRenderer.LETTER_BOXED);
+		} else if (renderer.equalsIgnoreCase("stretched")) {
+			rendererMode(ModeRenderer.STRETCHED);
+		} else {
+			rendererMode(ModeRenderer.CLASSIC);
+		}
 
-					String fileName = "android.resource://" + getContext().getPackageName() + "/" + R.raw.empty;
-					mMediaPlayer.setDataSource(getContext(), Uri.parse(fileName));
-				}
+		screen.setMaterial(material);
+		screen.setX(0f);
+		screen.setY(0f);
+		screen.setZ(0);
+	}
 
-				mMediaPlayer.setLooping(true);
-				mMediaPlayer.prepare();
-			} catch (IllegalArgumentException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (SecurityException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (IllegalStateException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-			if (renderer.equalsIgnoreCase("letter_boxed")) {
-				rendererModeLetterBox();
-			} else if (renderer.equalsIgnoreCase("stretched")) {
+	private void rendererMode(ModeRenderer modeRenderer) {
+		float ratioDisplay = (float) mViewportHeight / (float) mViewportWidth;
+		float ratioVideo = (float) mMediaPlayer.getVideoHeight()
+				/ mMediaPlayer.getVideoWidth();
+
+		if (ratioDisplay == ratioVideo) {
+			screen.setScaleX(1f);
+			screen.setScaleY(1f);
+			widthPlane = 1f;
+		} else if (ratioDisplay >= 1) {
+			// PORTRAIT
+			switch (modeRenderer) {
+			case STRETCHED:
 				rendererModeStretched();
-			} else {
+				break;
+			case LETTER_BOXED:
+				rendererModeLetterBox();
+				break;
+			default:
 				rendererModeClassic();
+				break;
 			}
-
-			screen.setMaterial(material);
-			screen.setX(0f);
-			screen.setY(0f);
-			screen.setZ(0);
+		} else {
+			// LANDSCAPE
+			switch (modeRenderer) {
+			case STRETCHED:
+				rendererModeStretched();
+				break;
+			case LETTER_BOXED:
+				rendererModeStretched();
+				break;
+			default:
+				rendererModeStretched();
+				break;
+			}
 		}
 	}
 
 	private void rendererModeClassic() {
-		float ratioDisplay = (float) mDisplayHeight / (float) mDisplayWidth;
-		float ratioVideo = (float) mMediaPlayer.getVideoHeight() / mMediaPlayer.getVideoWidth();
-
-		if (ratioDisplay == ratioVideo) {
-
-			screen.setScaleX(1f);
-			screen.setScaleY(1f);
-			widthPlane = 1f;
-		} else {
-			float ratioSize = 1f / mMediaPlayer.getVideoHeight();
-			widthPlane = mMediaPlayer.getVideoWidth() * ratioSize * ratioDisplay;
-			screen.setScaleX(widthPlane);
-			screen.setScaleY(1);
-		}
+		float ratioDisplay = (float) mViewportHeight / (float) mViewportWidth;
+		float ratioSize = 1f / mMediaPlayer.getVideoHeight();
+		widthPlane = mMediaPlayer.getVideoWidth() * ratioSize * ratioDisplay;
+		screen.setScaleX(widthPlane);
+		screen.setScaleY(1);
 	}
 
 	private void rendererModeLetterBox() {
+		float ratioDisplay = (float) mViewportWidth / (float) mViewportHeight;
+		float ratioSize = 1f / mMediaPlayer.getVideoWidth();
+		screen.setScaleY(mMediaPlayer.getVideoHeight() * ratioSize
+				* ratioDisplay);
+		screen.setScaleX(1f);
+		widthPlane = 1f;
 
-		float ratioDisplay = (float) mDisplayWidth / (float) mDisplayHeight;
-		float ratioVideo = (float) mMediaPlayer.getVideoWidth() / mMediaPlayer.getVideoHeight();
-
-		if (ratioDisplay == ratioVideo) {
-
-			screen.setScaleX(1f);
-			screen.setScaleY(1f);
-			widthPlane = 1f;
-		} else {
-			float ratioSize = 1f / mMediaPlayer.getVideoWidth();
-			screen.setScaleY(mMediaPlayer.getVideoHeight() * ratioSize * ratioDisplay);
-			screen.setScaleX(1f);
-			widthPlane = 1f;
-
-		}
 	}
 
 	private void rendererModeStretched() {
-		float ratioDisplay = (float) mDisplayHeight / (float) mDisplayWidth;
-		float ratioVideo = (float) mMediaPlayer.getVideoHeight() / mMediaPlayer.getVideoWidth();
-
-		if (ratioDisplay == ratioVideo) {
-
-			screen.setScaleX(1f);
-			screen.setScaleY(1f);
-			widthPlane = 1f;
-		} else {
-			float ratioSize = 1f / mMediaPlayer.getVideoHeight();
-			screen.setScaleX(mMediaPlayer.getVideoWidth() * ratioSize * ratioDisplay);
-			screen.setScaleY(1f);
-			widthPlane = 1f;
-
-		}
+		float ratioDisplay = (float) mViewportHeight / (float) mViewportWidth;
+		float ratioSize = 1f / mMediaPlayer.getVideoHeight();
+		screen.setScaleX(mMediaPlayer.getVideoWidth() * ratioSize
+				* ratioDisplay);
+		screen.setScaleY(1f);
+		widthPlane = 1f;
 	}
 
 	@Override
@@ -181,6 +205,12 @@ public class Renderer extends RajawaliRenderer implements SharedPreferences.OnSh
 	@Override
 	public void onSurfaceCreated(GL10 gl, EGLConfig config) {
 		super.onSurfaceCreated(gl, config);
+	}
+
+	@Override
+	public void onSurfaceChanged(GL10 gl, int width, int height) {
+		super.onSurfaceChanged(gl, width, height);
+		initPlane();
 	}
 
 	@Override
@@ -209,12 +239,15 @@ public class Renderer extends RajawaliRenderer implements SharedPreferences.OnSh
 	}
 
 	@Override
-	public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
+	public void onSharedPreferenceChanged(SharedPreferences sharedPreferences,
+			String key) {
 		initVideo();
 	}
 
 	@Override
-	public void onOffsetsChanged(float xOffset, float yOffset, float xOffsetStep, float yOffsetStep, int xPixelOffset, int yPixelOffset) {
+	public void onOffsetsChanged(float xOffset, float yOffset,
+			float xOffsetStep, float yOffsetStep, int xPixelOffset,
+			int yPixelOffset) {
 
 		if (screen != null) {
 			screen.setX((1 - widthPlane) * (xOffset - 0.5));
