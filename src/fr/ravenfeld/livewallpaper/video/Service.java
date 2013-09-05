@@ -9,7 +9,8 @@ public class Service extends Wallpaper {
 	@Override
 	public Engine onCreateEngine() {
 		mRenderer = new Renderer(this);
-		return new WallpaperEngine(this.getSharedPreferences(SHARED_PREFS_NAME, Context.MODE_PRIVATE), getBaseContext(), mRenderer, false);
+		return new WallpaperEngine(this.getSharedPreferences(SHARED_PREFS_NAME,
+				Context.MODE_PRIVATE), getBaseContext(), mRenderer, false);
 	}
 
 	@Override
