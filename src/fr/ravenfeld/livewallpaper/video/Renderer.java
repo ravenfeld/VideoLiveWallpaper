@@ -59,6 +59,8 @@ public class Renderer extends RajawaliRenderer implements
 		}
 		screen = new Plane(1f, 1f, 1, 1);
 		initVideo();
+		screen.setMaterial(material);
+		screen.setPosition(0f, 0f, 0f);
 		addChild(screen);
 		if (mMediaPlayer != null) {
 			mMediaPlayer.start();
@@ -126,10 +128,7 @@ public class Renderer extends RajawaliRenderer implements
 			rendererMode(ModeRenderer.CLASSIC);
 		}
 
-		screen.setMaterial(material);
-		screen.setX(0f);
-		screen.setY(0f);
-		screen.setZ(0);
+
 	}
 
 	private void rendererMode(ModeRenderer modeRenderer) {
