@@ -1,4 +1,4 @@
-#VideoLivewallpaper
+#VideoLiveWallpaper
 
 
 Live wallpaper with video (thanks to Rajawali)
@@ -6,21 +6,24 @@ Live wallpaper with video (thanks to Rajawali)
 
 ## Usage
 
-Please check out the [example project](https://github.com/ravenfeld/VideoLivewallpaper/tree/master).
+Please check out the [project](https://github.com/ravenfeld/VideoLiveWallpaper/tree/master).
 
 
 ### How to integrate it ?
 
 #### Eclipse
- You have to [download it](https://github.com/ravenfeld/VideoLivewallpaper/archive/master.zip) 
+
+ You have to [download it](https://github.com/ravenfeld/VideoLiveWallpaper/archive/master.zip) 
+ 
  You have to [download it](https://github.com/ravenfeld/aFileChooser/archive/dev.zip) 
+ 
  You have to [download it](https://github.com/ravenfeld/Rajawali/archive/master.zip) 
  
- Import the **VideoLivewallpaper-master** folder in your Eclipse.
+ Import the **VideoLiveWallpaper-master** folder in your Eclipse.
  
- Add aFileChooser to VideoLivewallpaper as an Android Library Project
+ Add aFileChooser to VideoLiveWallpaper as an Android Library Project
 
- Add Rajawali to VideoLivewallpaper as an Android Library Project
+ Add Rajawali to VideoLiveWallpaper as an Android Library Project
    
 ## Developed by
   * Alexis Lecanu alias Ravenfeld - [alexis.lecanu@gmail.com](mailto:alexis.lecanu@gmail.com)
