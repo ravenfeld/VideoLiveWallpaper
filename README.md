@@ -6,7 +6,7 @@ Live wallpaper with video (thanks to Rajawali)
 
 ## Usage
 
-Please check out the [project](https://github.com/ravenfeld/VideoLiveWallpaper/tree/master).
+Please check out the [project](https://github.com/ravenfeld/VideoLiveWallpaper/tree/my-dev).
 
 
 ### How to integrate it ?
@@ -17,7 +17,7 @@ Please check out the [project](https://github.com/ravenfeld/VideoLiveWallpaper/t
  
  You have to [download it](https://github.com/ravenfeld/aFileChooser/archive/dev.zip) 
  
- You have to [download it](https://github.com/ravenfeld/Rajawali/archive/master.zip) 
+ You have to [download it](https://github.com/ravenfeld/Rajawali/archive/my-dev.zip) 
  
  Import the **VideoLiveWallpaper-master** folder in your Eclipse.
  
