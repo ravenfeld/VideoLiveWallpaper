@@ -6,7 +6,7 @@ Live wallpaper with video (thanks to Rajawali)
 
 ## Usage
 
-Please check out the [project](https://github.com/ravenfeld/VideoLiveWallpaper/tree/my-dev).
+Please check out the [project](https://github.com/ravenfeld/VideoLiveWallpaper/tree/master).
 
 
 ### How to integrate it ?
