@@ -56,6 +56,7 @@
         
         <activity
             android:exported="false"
+            android:icon="@drawable/ic_chooser"
     android:name="com.ipaulpro.afilechooser.FileChooserActivity"
      android:label="@string/choose_file" >
     <intent-filter>
