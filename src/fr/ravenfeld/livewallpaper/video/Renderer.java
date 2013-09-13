@@ -10,7 +10,7 @@ import rajawali.Camera2D;
 import rajawali.materials.Material;
 import rajawali.materials.textures.ATexture.TextureException;
 import rajawali.materials.textures.VideoTexture;
-import rajawali.primitives.Plane;
+import rajawali.primitives.PointSprite;
 import rajawali.renderer.RajawaliRenderer;
 import rajawali.wallpaper.Wallpaper;
 import android.content.Context;
@@ -25,7 +25,7 @@ public class Renderer extends RajawaliRenderer implements
 	private MediaPlayer mMediaPlayer;
 	private VideoTexture mVideoTexture;
 	private final SharedPreferences mSharedPreferences;
-	private Plane screen;
+	private PointSprite screen;
 	private float widthPlane;
 	private Material material;
 
@@ -57,7 +57,7 @@ public class Renderer extends RajawaliRenderer implements
 		} catch (TextureException e) {
 			e.printStackTrace();
 		}
-		screen = new Plane(1f, 1f, 1, 1);
+		screen = new PointSprite(1f, 1f);
 		initVideo();
 		screen.setMaterial(material);
 		screen.setPosition(0f, 0f, 0f);
