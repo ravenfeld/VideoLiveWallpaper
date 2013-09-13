@@ -26,7 +26,7 @@ Please check out the [project](https://github.com/ravenfeld/VideoLiveWallpaper/t
  Add Rajawali to VideoLiveWallpaper as an Android Library Project
    
 ## Developed by
-  * Alexis Lecanu alias Ravenfeld - [alexis.lecanu@gmail.com](mailto:alexis.lecanu@gmail.com)
+  * Alexis Lecanu ( Ravenfeld ) - [alexis.lecanu@gmail.com](mailto:alexis.lecanu@gmail.com)
     
 ## Tested 
   * Galaxy S3
