@@ -84,6 +84,8 @@ public class Settings extends PreferenceActivity implements SharedPreferences.On
 			String[] uri_split = uri.split("/");
 			mFile.setSummary(getString(R.string.file_summary) + ": "
 					+ uri_split[uri_split.length - 1]);
+		} else {
+			mFile.setSummary(getString(R.string.file_summary) + ": ");
 		}
 	}
 

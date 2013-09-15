@@ -10,7 +10,7 @@ import rajawali.Camera2D;
 import rajawali.materials.Material;
 import rajawali.materials.textures.ATexture.TextureException;
 import rajawali.materials.textures.VideoTexture;
-import rajawali.primitives.PointSprite;
+import rajawali.primitives.Plane;
 import rajawali.renderer.RajawaliRenderer;
 import rajawali.wallpaper.Wallpaper;
 import android.content.Context;
@@ -25,9 +25,9 @@ public class Renderer extends RajawaliRenderer implements
 	private MediaPlayer mMediaPlayer;
 	private VideoTexture mVideoTexture;
 	private final SharedPreferences mSharedPreferences;
-	private PointSprite screen;
-	private float widthPlane;
-	private Material material;
+	private Plane mScreen;
+	private float mWidthPlane;
+	private Material mMaterial;
 
 	private enum ModeRenderer {
 		CLASSIC, LETTER_BOXED, STRETCHED
@@ -51,17 +51,18 @@ public class Renderer extends RajawaliRenderer implements
 		mMediaPlayer = new MediaPlayer();
 
 		mVideoTexture = new VideoTexture("VideoLiveWallpaper", mMediaPlayer);
-		material = new Material();
+		mMaterial = new Material();
 		try {
-			material.addTexture(mVideoTexture);
+			mMaterial.addTexture(mVideoTexture);
 		} catch (TextureException e) {
 			e.printStackTrace();
 		}
-		screen = new PointSprite(1f, 1f);
+		mScreen = new Plane(1f, 1f, 1, 1);
+		mScreen.setRotY(180);
 		initVideo();
-		screen.setMaterial(material);
-		screen.setPosition(0f, 0f, 0f);
-		addChild(screen);
+		mScreen.setMaterial(mMaterial);
+		mScreen.setPosition(0f, 0f, 0f);
+		addChild(mScreen);
 		if (mMediaPlayer != null) {
 			mMediaPlayer.start();
 		}
@@ -137,9 +138,9 @@ public class Renderer extends RajawaliRenderer implements
 				/ mMediaPlayer.getVideoWidth();
 
 		if (ratioDisplay == ratioVideo) {
-			screen.setScaleX(1f);
-			screen.setScaleY(1f);
-			widthPlane = 1f;
+			mScreen.setScaleX(1f);
+			mScreen.setScaleY(1f);
+			mWidthPlane = 1f;
 		} else if (ratioDisplay >= 1) {
 			// PORTRAIT
 			switch (modeRenderer) {
@@ -172,28 +173,28 @@ public class Renderer extends RajawaliRenderer implements
 	private void rendererModeClassic() {
 		float ratioDisplay = (float) mViewportHeight / (float) mViewportWidth;
 		float ratioSize = 1f / mMediaPlayer.getVideoHeight();
-		widthPlane = mMediaPlayer.getVideoWidth() * ratioSize * ratioDisplay;
-		screen.setScaleX(widthPlane);
-		screen.setScaleY(1);
+		mWidthPlane = mMediaPlayer.getVideoWidth() * ratioSize * ratioDisplay;
+		mScreen.setScaleX(mWidthPlane);
+		mScreen.setScaleY(1);
 	}
 
 	private void rendererModeLetterBox() {
 		float ratioDisplay = (float) mViewportWidth / (float) mViewportHeight;
 		float ratioSize = 1f / mMediaPlayer.getVideoWidth();
-		screen.setScaleY(mMediaPlayer.getVideoHeight() * ratioSize
+		mScreen.setScaleY(mMediaPlayer.getVideoHeight() * ratioSize
 				* ratioDisplay);
-		screen.setScaleX(1f);
-		widthPlane = 1f;
+		mScreen.setScaleX(1f);
+		mWidthPlane = 1f;
 
 	}
 
 	private void rendererModeStretched() {
 		float ratioDisplay = (float) mViewportHeight / (float) mViewportWidth;
 		float ratioSize = 1f / mMediaPlayer.getVideoHeight();
-		screen.setScaleX(mMediaPlayer.getVideoWidth() * ratioSize
+		mScreen.setScaleX(mMediaPlayer.getVideoWidth() * ratioSize
 				* ratioDisplay);
-		screen.setScaleY(1f);
-		widthPlane = 1f;
+		mScreen.setScaleY(1f);
+		mWidthPlane = 1f;
 	}
 
 	@Override
@@ -249,8 +250,8 @@ public class Renderer extends RajawaliRenderer implements
 			float xOffsetStep, float yOffsetStep, int xPixelOffset,
 			int yPixelOffset) {
 
-		if (screen != null) {
-			screen.setX((1 - widthPlane) * (xOffset - 0.5));
+		if (mScreen != null) {
+			mScreen.setX((1 - mWidthPlane) * (xOffset - 0.5));
 		}
 	}
 }
