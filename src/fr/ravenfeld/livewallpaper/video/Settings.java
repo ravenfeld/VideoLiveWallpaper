@@ -23,6 +23,8 @@ public class Settings extends PreferenceActivity implements SharedPreferences.On
 	static {
 		INCLUDE_EXTENSIONS_LIST.add(".mp4");
 		INCLUDE_EXTENSIONS_LIST.add(".3gp");
+		INCLUDE_EXTENSIONS_LIST.add(".MP4");
+		INCLUDE_EXTENSIONS_LIST.add(".3GP");
 	}
 	private Preference mFile;
 	private ListPreference mRendererMode;
