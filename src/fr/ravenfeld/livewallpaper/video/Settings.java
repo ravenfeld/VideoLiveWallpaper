@@ -92,17 +92,7 @@ public class Settings extends PreferenceActivity implements SharedPreferences.On
 	}
 
 	private void rendererText() {
-		String stringValue = mRendererMode.getValue();
-		String string = "";
-		if (stringValue.equalsIgnoreCase("classic")) {
-			string = getString(R.string.classic);
-		} else if (stringValue.equalsIgnoreCase("letter_boxed")) {
-			string = getString(R.string.letter_boxed);
-		} else if (stringValue.equalsIgnoreCase("stretched")) {
-			string = getString(R.string.stretched);
-		}
-
-		mRendererMode.setSummary(getString(R.string.renderer_mode_list_summary) + ": " + string);
+		mRendererMode.setSummary(getString(R.string.renderer_mode_list_summary) + ": " + mRendererMode.getEntry());
 	}
 
 	private void setUriPreference(String uri) {
