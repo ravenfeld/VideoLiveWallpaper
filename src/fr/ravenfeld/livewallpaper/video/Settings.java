@@ -32,7 +32,6 @@ public class Settings extends PreferenceActivity implements SharedPreferences.On
 	@Override
 	protected void onCreate(Bundle icicle) {
 		super.onCreate(icicle);
-		// setContentView(R.layout.pref);
 		getPreferenceManager().setSharedPreferencesName(Wallpaper.SHARED_PREFS_NAME);
 		addPreferencesFromResource(R.xml.settings);
 		getPreferenceManager().getSharedPreferences().registerOnSharedPreferenceChangeListener(this);
