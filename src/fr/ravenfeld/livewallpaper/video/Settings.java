@@ -34,7 +34,6 @@ public class Settings extends PreferenceActivity implements SharedPreferences.On
 		super.onCreate(icicle);
 		getPreferenceManager().setSharedPreferencesName(Wallpaper.SHARED_PREFS_NAME);
 		addPreferencesFromResource(R.xml.settings);
-		getPreferenceManager().getSharedPreferences().registerOnSharedPreferenceChangeListener(this);
 		mFile = findPreference("file");
 		mRendererMode = (ListPreference) findPreference("rendererMode");
 
@@ -54,7 +53,8 @@ public class Settings extends PreferenceActivity implements SharedPreferences.On
 				return false;
 			}
 		});
-	}
+        getPreferenceManager().getSharedPreferences().registerOnSharedPreferenceChangeListener(this);
+    }
 
 	@Override
 	protected void onResume() {
