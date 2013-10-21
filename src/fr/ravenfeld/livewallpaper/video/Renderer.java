@@ -15,6 +15,7 @@ import rajawali.renderer.RajawaliRenderer;
 import rajawali.wallpaper.Wallpaper;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.media.MediaPlayer;
 import android.net.Uri;
 
@@ -46,12 +47,13 @@ public class Renderer extends RajawaliRenderer implements
 	protected void initScene() {
 		Camera2D cam = new Camera2D();
 		this.replaceAndSwitchCamera(getCurrentCamera(), cam);
-		getCurrentScene().setBackgroundColor(0xff040404);
+		getCurrentScene().setBackgroundColor(Color.BLACK);
 		getCurrentCamera().setLookAt(0, 0, 0);
 		mMediaPlayer = new MediaPlayer();
 
 		mVideoTexture = new VideoTexture("VideoLiveWallpaper", mMediaPlayer);
 		mMaterial = new Material();
+        mMaterial.setColorInfluence(0);
 		try {
 			mMaterial.addTexture(mVideoTexture);
 		} catch (TextureException e) {
@@ -87,9 +89,8 @@ public class Renderer extends RajawaliRenderer implements
 
 	private void initMedia() {
 		Uri uri = Uri.parse(mSharedPreferences.getString("uri", ""));
-
 		mMediaPlayer.stop();
-		mMediaPlayer.reset();
+
 
 		try {
 			File file = FileUtils.getFile(uri);
@@ -231,12 +232,13 @@ public class Renderer extends RajawaliRenderer implements
 	public void onSurfaceDestroyed() {
 		super.onSurfaceDestroyed();
 		if (mMediaPlayer != null) {
-			if (mMediaPlayer.isPlaying()) {
 				mMediaPlayer.stop();
 				mMediaPlayer.release();
-			}
-		}
 
+		}
+        mMaterial.removeTexture(mVideoTexture);
+        mTextureManager.taskRemove(mVideoTexture);
+        mMaterialManager.taskRemove(mMaterial);
 	}
 
 	@Override
