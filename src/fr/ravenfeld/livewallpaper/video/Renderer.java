@@ -30,6 +30,7 @@ public class Renderer extends RajawaliRenderer implements
     private Plane mScreen;
     private float mWidthPlane;
     private Material mMaterial;
+    private boolean mInit;
 
     private enum ModeRenderer {
         CLASSIC, LETTER_BOXED, STRETCHED
@@ -45,6 +46,8 @@ public class Renderer extends RajawaliRenderer implements
 
     @Override
     protected void initScene() {
+        mInit = true;
+        setFrameRate(60);
         Camera2D cam = new Camera2D();
         this.replaceAndSwitchCamera(getCurrentCamera(), cam);
         getCurrentScene().setBackgroundColor(Color.BLACK);
@@ -69,8 +72,8 @@ public class Renderer extends RajawaliRenderer implements
 
     private void initVideo() {
         if (mMediaPlayer != null) {
-            initMute();
             initMedia();
+            initMute();
             initPlane();
         }
     }
@@ -85,9 +88,17 @@ public class Renderer extends RajawaliRenderer implements
     }
 
     private void initMedia() {
-        Uri uri = Uri.parse(mSharedPreferences.getString("uri", ""));
-        mMediaPlayer.stop();
 
+        Uri uri = Uri.parse(mSharedPreferences.getString("uri", ""));
+        if (mInit == false) {
+            if (mMediaPlayer.isPlaying()) {
+                mMediaPlayer.pause();
+            }
+            if (!mMediaPlayer.isPlaying()) {
+                mMediaPlayer.stop();
+                mMediaPlayer.reset();
+            }
+        }
         try {
             File file = FileUtils.getFile(uri);
             if (file != null && file.isFile()) {
@@ -100,12 +111,13 @@ public class Renderer extends RajawaliRenderer implements
 
             mMediaPlayer.setLooping(true);
             mMediaPlayer.prepare();
-            mMediaPlayer.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
-                @Override
-                public void onPrepared(MediaPlayer mediaPlayer) {
-                    mediaPlayer.start();
-                }
-            });
+            mMediaPlayer.seekTo(0);
+            if (mInit) {
+                mMediaPlayer.start();
+            } else {
+                mTextureManager.replaceTexture(mVideoTexture);
+            }
+            mInit = false;
         } catch (IllegalArgumentException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
@@ -200,7 +212,9 @@ public class Renderer extends RajawaliRenderer implements
     @Override
     public void onDrawFrame(GL10 glUnused) {
         super.onDrawFrame(glUnused);
-        mVideoTexture.update();
+        if (mMediaPlayer.isPlaying()) {
+            mVideoTexture.update();
+        }
     }
 
     @Override
@@ -219,9 +233,11 @@ public class Renderer extends RajawaliRenderer implements
         super.onVisibilityChanged(visible);
         if (!visible) {
             if (mMediaPlayer != null) {
-                mMediaPlayer.pause();
+                if (mMediaPlayer.isPlaying()) {
+                    mMediaPlayer.pause();
+                }
             }
-        } else if (mMediaPlayer != null) {
+        } else if (mMediaPlayer != null && mInit == false) {
             mMediaPlayer.start();
         }
     }
@@ -229,10 +245,10 @@ public class Renderer extends RajawaliRenderer implements
     @Override
     public void onSurfaceDestroyed() {
 
-	if (mMediaPlayer != null ) {
+        if (mMediaPlayer != null) {
             mMediaPlayer.release();
-		}
-
+            mMediaPlayer = null;
+        }
         mMaterial.removeTexture(mVideoTexture);
         mTextureManager.taskRemove(mVideoTexture);
         mMaterialManager.taskRemove(mMaterial);
@@ -242,7 +258,11 @@ public class Renderer extends RajawaliRenderer implements
     @Override
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences,
                                           String key) {
-        initVideo();
+        if (key.equalsIgnoreCase("uri")) {
+            initVideo();
+        } else if (key.equalsIgnoreCase("mute")) {
+            initMute();
+        }
     }
 
     @Override
@@ -254,4 +274,5 @@ public class Renderer extends RajawaliRenderer implements
             mScreen.setX((1 - mWidthPlane) * (xOffset - 0.5));
         }
     }
+
 }
