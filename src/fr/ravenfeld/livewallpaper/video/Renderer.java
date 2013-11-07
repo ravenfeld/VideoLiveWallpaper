@@ -80,10 +80,12 @@ public class Renderer extends RajawaliRenderer implements
 
     private void initMute() {
         boolean mute = mSharedPreferences.getBoolean("mute", false);
-        if (mute) {
-            mMediaPlayer.setVolume(0, 0);
-        } else {
-            mMediaPlayer.setVolume(1, 1);
+        if (mMediaPlayer != null) {
+            if (mute) {
+                mMediaPlayer.setVolume(0, 0);
+            } else {
+                mMediaPlayer.setVolume(1, 1);
+            }
         }
     }
 
