@@ -20,13 +20,11 @@ import rajawali.materials.textures.ATexture.TextureException;
 import rajawali.materials.textures.VideoTexture;
 import rajawali.primitives.Plane;
 import rajawali.renderer.RajawaliRenderer;
-import rajawali.wallpaper.Wallpaper;
 
 public class Renderer extends RajawaliRenderer implements
         SharedPreferences.OnSharedPreferenceChangeListener {
     private MediaPlayer mMediaPlayer;
     private VideoTexture mVideoTexture;
-    private final SharedPreferences mSharedPreferences;
     private Plane mScreen;
     private float mWidthPlane;
     private Material mMaterial;
@@ -38,10 +36,13 @@ public class Renderer extends RajawaliRenderer implements
 
     public Renderer(Context context) {
         super(context);
+    }
 
-        mSharedPreferences = context.getSharedPreferences(
-                Wallpaper.SHARED_PREFS_NAME, 0);
-        mSharedPreferences.registerOnSharedPreferenceChangeListener(this);
+    @Override
+    public void setSharedPreferences(SharedPreferences preferences) {
+        super.setSharedPreferences(preferences);
+        preferences.registerOnSharedPreferenceChangeListener(this);
+        initVideo();
     }
 
     @Override
@@ -64,7 +65,6 @@ public class Renderer extends RajawaliRenderer implements
         }
         mScreen = new Plane(1f, 1f, 1, 1);
         mScreen.setRotY(180);
-        initVideo();
         mScreen.setMaterial(mMaterial);
         mScreen.setPosition(0f, 0f, 0f);
         addChild(mScreen);
@@ -79,7 +79,10 @@ public class Renderer extends RajawaliRenderer implements
     }
 
     private void initMute() {
-        boolean mute = mSharedPreferences.getBoolean("mute", false);
+        boolean mute=false;
+        if(preferences != null){
+            mute = preferences.getBoolean("mute", false);
+        }
         if (mMediaPlayer != null) {
             if (mute) {
                 mMediaPlayer.setVolume(0, 0);
@@ -90,8 +93,11 @@ public class Renderer extends RajawaliRenderer implements
     }
 
     private void initMedia() {
+        Uri uri = Uri.parse("");
+        if(preferences!= null){
+            uri = Uri.parse(preferences.getString("uri", ""));
+        }
 
-        Uri uri = Uri.parse(mSharedPreferences.getString("uri", ""));
         if (mInit == false) {
             if (mMediaPlayer.isPlaying()) {
                 mMediaPlayer.pause();
@@ -136,8 +142,11 @@ public class Renderer extends RajawaliRenderer implements
     }
 
     private void initPlane() {
-        String renderer = mSharedPreferences.getString("rendererMode",
+        String renderer="classic";
+        if(preferences!= null){
+            renderer = preferences.getString("rendererMode",
                 "classic");
+        }
         if (renderer.equalsIgnoreCase("letter_boxed")) {
             rendererMode(ModeRenderer.LETTER_BOXED);
         } else if (renderer.equalsIgnoreCase("stretched")) {
