@@ -5,6 +5,7 @@ import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.media.MediaPlayer;
 import android.net.Uri;
+import android.util.Log;
 
 import com.ipaulpro.afilechooser.utils.FileUtils;
 
@@ -20,6 +21,7 @@ import rajawali.materials.textures.ATexture.TextureException;
 import rajawali.materials.textures.VideoTexture;
 import rajawali.primitives.Plane;
 import rajawali.renderer.RajawaliRenderer;
+import rajawali.wallpaper.Wallpaper;
 
 public class Renderer extends RajawaliRenderer implements
         SharedPreferences.OnSharedPreferenceChangeListener {
@@ -42,7 +44,6 @@ public class Renderer extends RajawaliRenderer implements
     public void setSharedPreferences(SharedPreferences preferences) {
         super.setSharedPreferences(preferences);
         preferences.registerOnSharedPreferenceChangeListener(this);
-        initVideo();
     }
 
     @Override
@@ -65,6 +66,7 @@ public class Renderer extends RajawaliRenderer implements
         }
         mScreen = new Plane(1f, 1f, 1, 1);
         mScreen.setRotY(180);
+        initVideo();
         mScreen.setMaterial(mMaterial);
         mScreen.setPosition(0f, 0f, 0f);
         addChild(mScreen);
@@ -126,6 +128,7 @@ public class Renderer extends RajawaliRenderer implements
                 mTextureManager.replaceTexture(mVideoTexture);
             }
             mInit = false;
+
         } catch (IllegalArgumentException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
